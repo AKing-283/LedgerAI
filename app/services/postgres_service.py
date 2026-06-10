@@ -3,9 +3,9 @@ from app.db.models import Document
 
 
 def save_document(
-    filename: str,
-    content: str,
-    metadata: dict
+    filename,
+    content,
+    metadata
 ):
 
     db = SessionLocal()
@@ -13,11 +13,11 @@ def save_document(
     document = Document(
         filename=filename,
         content=content,
-        vendor=metadata.get("vendor"),
-        invoice_number=metadata.get("invoice_number"),
-        gst_number=metadata.get("gst_number"),
-        amount=metadata.get("amount"),
-        invoice_date=metadata.get("date")
+        vendor=metadata.get("vendor", ""),
+        invoice_number=metadata.get("invoice_number", ""),
+        gst_number=metadata.get("gst_number", ""),
+        amount=float(metadata.get("amount", 0) or 0),
+        invoice_date=metadata.get("date", "")
     )
 
     db.add(document)
@@ -25,7 +25,5 @@ def save_document(
     db.commit()
 
     db.refresh(document)
-
-    db.close()
 
     return document

@@ -1,5 +1,6 @@
 import os
 
+from pydoc import doc
 from uuid import uuid4
 
 from fastapi import APIRouter
@@ -49,12 +50,13 @@ async def upload_pdf(
     print(metadata)
     print("====================\n")
     document = save_document(
-        file.filename,
-        text,
-        metadata
+        filename=file.filename,
+        content=text,
+        metadata=metadata
     )
     
     chunks = create_chunks(text)
+    document.total_chunks = len(chunks)
 
     store_chunks(
         document.id,

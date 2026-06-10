@@ -2,22 +2,18 @@ import streamlit as st
 
 from utils.api import upload_document
 
-st.title("Upload Documents")
+st.title("Upload Invoice")
 
-uploaded_file = st.file_uploader(
-    "Upload Invoice PDF",
+file = st.file_uploader(
+    "Choose PDF",
     type=["pdf"]
 )
 
-if uploaded_file:
+if file:
 
     if st.button("Upload"):
 
-        with st.spinner("Uploading..."):
-
-            result = upload_document(
-                uploaded_file
-            )
+        result = upload_document(file)
 
         st.success("Uploaded")
 

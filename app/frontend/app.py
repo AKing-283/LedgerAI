@@ -5,12 +5,6 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("AI Accountant Copilot")
-
-st.write(
-    """
-    Upload accounting documents,
-    extract metadata,
-    and chat with invoices.
-    """
+st.title(
+    "AI Accountant Copilot"
 )

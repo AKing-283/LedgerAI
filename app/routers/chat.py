@@ -4,6 +4,7 @@ from app.schemas.chat import ChatRequest
 from app.agents.document_agent import DocumentAgent
 
 router = APIRouter(tags=["Chat"])
+
 document_agent = DocumentAgent()
 
 
@@ -12,10 +13,8 @@ def chat(request: ChatRequest):
 
     print("QUESTION:", request.question)
 
-    answer = document_agent.run(
+    result = document_agent.run(
         request.question
     )
 
-    return {
-        "answer": answer
-    }
+    return result

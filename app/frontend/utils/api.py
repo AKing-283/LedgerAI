@@ -3,6 +3,12 @@ import requests
 BASE_URL = "http://127.0.0.1:8000"
 
 
+def get_documents():
+    return requests.get(
+        f"{BASE_URL}/documents"
+    ).json()
+
+
 def upload_document(file):
 
     files = {
@@ -13,21 +19,17 @@ def upload_document(file):
         )
     }
 
-    response = requests.post(
+    return requests.post(
         f"{BASE_URL}/upload",
         files=files
-    )
-
-    return response.json()
+    ).json()
 
 
 def ask_question(question):
 
-    response = requests.post(
+    return requests.post(
         f"{BASE_URL}/chat",
         json={
             "question": question
         }
-    )
-
-    return response.json()
+    ).json()

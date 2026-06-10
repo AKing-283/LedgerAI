@@ -10,14 +10,14 @@ question = st.text_input(
 
 if st.button("Ask"):
 
-    with st.spinner("Thinking..."):
-
-        response = ask_question(
-            question
-        )
-
-    st.success("Answer")
+    result = ask_question(
+        question
+    )
 
     st.write(
-        response["answer"]
+        f"Query Type: {result['query_type']}"
+    )
+
+    st.success(
+        result["answer"]
     )
