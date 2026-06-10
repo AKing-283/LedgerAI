@@ -1,6 +1,6 @@
 import requests
 
-BASE_URL = "http://127.0.0.1:8000"
+BASE_URL = "https://ai-accountant-copilot-102553128784.europe-west1.run.app"
 
 
 def get_documents():
