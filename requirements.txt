@@ -1,0 +1,49 @@
+# FastAPI & Server
+fastapi
+uvicorn[standard]
+python-multipart
+
+# Pydantic
+pydantic
+pydantic-settings
+
+# LangChain & LangGraph
+langchain
+langchain-core
+langchain-community
+langgraph
+
+# Groq
+langchain-groq
+groq
+
+# Embeddings & Vector DB
+sentence-transformers
+qdrant-client
+
+# PostgreSQL & Database
+sqlalchemy
+psycopg2-binary
+alembic
+
+# Document Processing & OCR
+pypdf
+pdfplumber
+pytesseract
+Pillow
+
+# Data Processing
+pandas
+numpy
+
+# Authentication
+python-jose[cryptography]
+passlib[bcrypt]
+
+# Utilities
+python-dotenv
+httpx
+
+# Logging & Validation
+loguru
+email-validator
