@@ -20,7 +20,7 @@ from app.services.document_metadata_service import extract_metadata
 router = APIRouter()
 
 
-UPLOAD_DIR = "uploads"
+UPLOAD_DIR = "/tmp"
 os.makedirs(
     UPLOAD_DIR,
     exist_ok=True
