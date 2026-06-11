@@ -21,6 +21,16 @@ def save_document(
         invoice_date=metadata.get("date", "")
     )
 
+    existing = db.query(Document).filter(
+    Document.invoice_number == metadata.get(
+            "invoice_number",
+            ""
+        )
+    ).first()
+
+    if existing:
+        db.close()
+        return existing
     db.add(document)
 
     db.commit()
