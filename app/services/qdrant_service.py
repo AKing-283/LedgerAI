@@ -56,7 +56,7 @@ def store_embedding(
 
 def search_documents(
     query_embedding,
-    limit=5
+    limit=10
 ):
 
     print("Searching Qdrant...")

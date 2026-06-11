@@ -1,5 +1,6 @@
 from app.db.session import SessionLocal
 from app.db.models import Document
+from sqlalchemy import or_
 
 
 def save_document(
@@ -27,3 +28,25 @@ def save_document(
     db.refresh(document)
 
     return document
+
+def search_documents_keyword(
+    question: str,
+    limit: int = 5
+):
+
+    db = SessionLocal()
+
+    results = db.query(Document).filter(
+
+        or_(
+            Document.content.ilike(f"%{question}%"),
+            Document.vendor.ilike(f"%{question}%"),
+            Document.invoice_number.ilike(f"%{question}%"),
+            Document.gst_number.ilike(f"%{question}%")
+        )
+
+    ).limit(limit).all()
+
+    db.close()
+
+    return results
