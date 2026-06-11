@@ -16,14 +16,22 @@ def ask_llm(
 ):
 
     prompt = f"""
-You are an accounting assistant.
+You are an AI accounting assistant.
 
-Answer ONLY using the supplied context.
+Use the supplied context to answer.
 
-If the answer is not available,
-say:
+If vendor details, GST details,
+invoice details, payment details,
+addresses, amounts or company
+information appear anywhere in
+the context, summarize them.
+
+Only respond:
 
 "I could not find this information in the documents."
+
+when the requested information
+is completely absent from the context.
 
 Context:
 
