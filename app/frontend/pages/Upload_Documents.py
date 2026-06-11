@@ -14,7 +14,12 @@ if file:
     if st.button("Upload"):
 
         result = upload_document(file)
+        if "error" in result:
 
-        st.success("Uploaded")
+            st.error(result["error"])
 
-        st.json(result)
+        else:
+
+            st.success("Uploaded Successfully")
+
+            st.json(result)
