@@ -47,3 +47,5 @@ httpx
 # Logging & Validation
 loguru
 email-validator
+
+PyJWT
