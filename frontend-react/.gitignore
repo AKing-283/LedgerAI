@@ -1,0 +1,173 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+myenv/
+venv/
+env/
+.venv/
+
+# Python Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Pytest
+.pytest_cache/
+
+# Coverage
+.coverage
+htmlcov/
+
+# Mypy
+.mypy_cache/
+
+# Ruff
+.ruff_cache/
+
+# =========================
+# Environment Variables
+# =========================
+.env
+.env.local
+.env.production
+.env.development
+
+# Secrets
+secrets.json
+credentials.json
+
+# =========================
+# FastAPI
+# =========================
+*.log
+
+# Uploads
+uploads/
+tmp/
+temp/
+
+# SQLite
+*.db
+*.sqlite3
+
+# =========================
+# PostgreSQL Dumps
+# =========================
+*.sql
+*.dump
+
+# =========================
+# Qdrant
+# =========================
+qdrant_storage/
+qdrant_data/
+
+# =========================
+# AI Models
+# =========================
+models/
+checkpoints/
+*.bin
+*.pt
+*.pth
+*.onnx
+
+# =========================
+# React / Vite
+# =========================
+frontend-react/node_modules/
+node_modules/
+
+frontend-react/dist/
+dist/
+
+.vite/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# =========================
+# Streamlit
+# =========================
+.streamlit/secrets.toml
+
+# =========================
+# VS Code
+# =========================
+.vscode/
+
+# =========================
+# JetBrains
+# =========================
+.idea/
+
+# =========================
+# Windows
+# =========================
+Thumbs.db
+Desktop.ini
+
+# =========================
+# Mac
+# =========================
+.DS_Store
+
+# =========================
+# Generated PDFs
+# =========================
+*.pdf
+
+# Except documentation PDFs
+!docs/*.pdf
+
+# =========================
+# AI Accountant Copilot
+# =========================
+
+# Invoice uploads
+invoice_uploads/
+document_uploads/
+
+# OCR outputs
+ocr_output/
+
+# Extracted documents
+processed_docs/
+
+# Embeddings cache
+embeddings/
+
+# Chunks cache
+chunks/
+
+# Local vector storage
+vector_store/
+
+# Exported reports
+reports/
+
+# Backup files
+backup/
+backups/
+
+# =========================
+# Runtime files
+# =========================
+*.pid
+*.seed
+*.out
+*.err
+
+# =========================
+# Docker
+# =========================
+docker-data/

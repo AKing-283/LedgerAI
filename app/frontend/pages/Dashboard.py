@@ -1,11 +1,20 @@
+import token
+
 import streamlit as st
 import pandas as pd
 
 from utils.api import get_documents
+if "token" not in st.session_state:
 
+    st.error(
+        "Please login first"
+    )
+
+    st.stop()
 st.title("AI Accountant Copilot")
 
-docs = get_documents()
+token = st.session_state.get("token")
+docs = get_documents(token=token)
 
 if not docs:
     st.warning("No documents uploaded")

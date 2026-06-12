@@ -4,7 +4,10 @@ from app.services.groq_service import ask_llm
 
 class DocumentAgent:
 
-    def classify_query(self, question: str):
+    def classify_query(
+        self,
+        question
+    ):
 
         q = question.lower()
 
@@ -20,20 +23,30 @@ class DocumentAgent:
         if "vendor" in q:
             return "vendor"
 
-        if "amount" in q:
-            return "amount"
-
         return "general"
 
-    def run(self, question: str):
+    def run(
+        self,
+        organization_id,
+        question
+    ):
+        print("=" * 50)
+        print("DOCUMENT AGENT")
+        print("ORG:", organization_id)
+        print("QUESTION:", question)
+        print("=" * 50)
+        query_type = self.classify_query(
+            question
+        )
 
-        query_type = self.classify_query(question)
-
-        context = retrieve_context(question)
+        context = retrieve_context(
+            organization_id,
+            question
+        )
 
         answer = ask_llm(
-            question=question,
-            context=context
+            question,
+            context
         )
 
         return {

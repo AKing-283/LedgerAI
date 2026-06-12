@@ -1,35 +1,37 @@
 import os
 
-from pydoc import doc
 from uuid import uuid4
 
 from fastapi import APIRouter
 from fastapi import UploadFile
 from fastapi import File
+from fastapi import Depends
 
 from app.services.pdf_service import extract_text
-
-from app.services.embedding_service import create_embedding
-
 from app.services.postgres_service import save_document
-
-from app.services.qdrant_service import store_embedding
 from app.services.chunking_service import create_chunks
 from app.services.qdrant_service import store_chunks
 from app.services.document_metadata_service import extract_metadata
+
+from app.auth.auth_dependency import get_current_user
+
 router = APIRouter()
 
-
 UPLOAD_DIR = "/tmp"
+
 os.makedirs(
     UPLOAD_DIR,
     exist_ok=True
 )
 
+
 @router.post("/upload")
 async def upload_pdf(
-    file: UploadFile = File(...)
+    file: UploadFile = File(...),
+    current_user=Depends(get_current_user)
 ):
+
+    organization_id = current_user["organization_id"]
 
     file_id = str(uuid4())
 
@@ -48,22 +50,22 @@ async def upload_pdf(
         )
 
     text = extract_text(file_path)
+
     metadata = extract_metadata(text)
-    print("\n===== METADATA =====")
-    print(metadata)
-    print("====================\n")
+
     document = save_document(
+        organization_id=organization_id,
         filename=file.filename,
         content=text,
         metadata=metadata
     )
-    
+
     chunks = create_chunks(text)
-    document.total_chunks = len(chunks)
 
     store_chunks(
-        document.id,
-        chunks
+        organization_id=organization_id,
+        document_id=document.id,
+        chunks=chunks
     )
 
     return {

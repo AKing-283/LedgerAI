@@ -1,78 +1,47 @@
-from app.services.embedding_service import (
-    create_embedding
-)
-
-from app.services.qdrant_service import (
-    search_documents
-)
-
-from app.services.postgres_service import (
-    search_documents_keyword
-)
+from app.services.embedding_service import create_embedding
+from app.services.qdrant_service import search_documents
 
 
 def retrieve_context(
-    question: str
+    organization_id,
+    question
 ):
 
-    context_parts = []
-
-    # ------------------
-    # Keyword Search
-    # ------------------
-
-    keyword_results = search_documents_keyword(
-        question
-    )
-
-    for doc in keyword_results:
-
-        if doc.content:
-
-            context_parts.append(
-                doc.content[:3000]
-            )
-
-    # ------------------
-    # Vector Search
-    # ------------------
+    print("RETRIEVE CONTEXT")
+    print("ORG:", organization_id)
 
     query_embedding = create_embedding(
         question
     )
 
-    vector_results = search_documents(
-        query_embedding,
-        limit=8
+    results = search_documents(
+        organization_id,
+        query_embedding
     )
 
-    for result in vector_results:
+    print(
+        "RESULTS FOUND:",
+        len(results)
+    )
+
+    context = []
+
+    for result in results:
 
         payload = result.payload or {}
 
-        content = payload.get(
-            "content",
-            ""
+        print(
+            "PAYLOAD ORG:",
+            payload.get(
+                "organization_id"
+            )
         )
 
-        if content:
-
-            context_parts.append(
-                content
+        context.append(
+            payload.get(
+                "content",
+                ""
             )
+        )
 
-    # Remove duplicates
-
-    unique_context = []
-
-    seen = set()
-
-    for item in context_parts:
-
-        if item not in seen:
-
-            unique_context.append(item)
-
-            seen.add(item)
-
-    return "\n\n".join(unique_context)
+    return "\n\n".join(context)

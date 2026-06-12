@@ -3,12 +3,28 @@ import pandas as pd
 
 from utils.api import get_documents
 
+if "token" not in st.session_state:
+
+    st.error(
+        "Please login first"
+    )
+
+    st.stop()
+
 st.title("Documents")
 
-docs = get_documents()
+token = st.session_state.get(
+    "token"
+)
+
+docs = get_documents(token)
 
 if not docs:
-    st.warning("No documents uploaded")
+
+    st.warning(
+        "No documents uploaded"
+    )
+
 else:
 
     df = pd.DataFrame(docs)
@@ -18,11 +34,15 @@ else:
         width="stretch"
     )
 
-    st.subheader("Uploaded Documents")
+    st.subheader(
+        "Uploaded Documents"
+    )
 
     for doc in docs:
 
-        with st.expander(doc["filename"]):
+        with st.expander(
+            doc["filename"]
+        ):
 
             st.write(
                 f"Vendor: {doc.get('vendor','')}"
