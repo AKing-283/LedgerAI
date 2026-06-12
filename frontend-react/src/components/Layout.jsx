@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
+import Footer from "./Footer";
 
 function Layout({ children }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -35,10 +36,15 @@ function Layout({ children }) {
         <div
           style={{
             flex: 1,
-            marginTop: "20px"
+            marginTop: "20px",
+            display: "flex",
+            flexDirection: "column"
           }}
         >
-          {children}
+          <div style={{ flex: 1 }}>
+            {children}
+          </div>
+          <Footer />
         </div>
       </div>
     </div>

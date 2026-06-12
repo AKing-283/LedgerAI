@@ -14,6 +14,7 @@ import Chat from "./pages/Chat";
 import Profile from "./pages/Profile";
 import Billing from "./pages/Billing";
 import Settings from "./pages/Settings";
+import About from "./pages/About";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Layout from "./components/Layout";
 
@@ -86,6 +87,17 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <Settings />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/about"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <About />
               </Layout>
             </ProtectedRoute>
           }

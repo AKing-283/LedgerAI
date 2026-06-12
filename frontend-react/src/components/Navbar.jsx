@@ -8,6 +8,7 @@ function Navbar({ collapsed }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("User");
   const [organization, setOrganization] = useState("Organization");
+  const [notifications, setNotifications] = useState(0);
 
   useEffect(() => {
     const decoded = decodeToken();
@@ -21,6 +22,19 @@ function Navbar({ collapsed }) {
         setOrganization(decoded.organization_name);
       }
     }
+    const storedNotifications = localStorage.getItem("notifications_count");
+    if (storedNotifications) {
+      setNotifications(Number(storedNotifications));
+    }
+
+    const handleStorage = () => {
+      const updated = localStorage.getItem("notifications_count");
+      setNotifications(Number(updated) || 0);
+    };
+
+    window.addEventListener("storage", handleStorage);
+
+    return () => window.removeEventListener("storage", handleStorage);
   }, []);
 
   return (
@@ -58,23 +72,50 @@ function Navbar({ collapsed }) {
         }}
       >
         <div
+          onClick={() => navigate("/about")}
+          style={{
+            cursor: "pointer",
+            fontSize: "14px",
+            opacity: 0.8,
+            padding: "6px 12px",
+            borderRadius: "10px",
+            border: "1px solid rgba(255,255,255,0.08)"
+          }}
+        >
+          About
+        </div>
+        <div
+          onClick={() => {
+            localStorage.setItem("notifications_count", "0");
+            setNotifications(0);
+          }}
           style={{
             position: "relative",
             cursor: "pointer"
           }}
         >
           <FiBell size={20} />
-          <span
-            style={{
-              position: "absolute",
-              top: "-4px",
-              right: "-4px",
-              width: "8px",
-              height: "8px",
-              borderRadius: "50%",
-              background: "#22c55e"
-            }}
-          />
+          {notifications > 0 && (
+            <span
+              style={{
+                position: "absolute",
+                top: "-6px",
+                right: "-6px",
+                minWidth: "18px",
+                height: "18px",
+                borderRadius: "50%",
+                background: "#22c55e",
+                color: "#000",
+                fontSize: "11px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 600
+              }}
+            >
+              {notifications}
+            </span>
+          )}
         </div>
 
         <div
