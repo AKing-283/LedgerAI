@@ -1,9 +1,27 @@
-import Navbar from "../components/Navbar";
+import { useEffect, useState } from "react";
+import { decodeToken } from "../services/api";
 
 function Profile() {
+
+  const [email, setEmail] = useState("");
+  const [organization, setOrganization] = useState("");
+
+  useEffect(() => {
+    const decoded = decodeToken();
+
+    if (decoded) {
+      if (decoded.email) {
+        setEmail(decoded.email);
+      }
+
+      if (decoded.organization_name) {
+        setOrganization(decoded.organization_name);
+      }
+    }
+  }, []);
+
   return (
     <div className="page-container">
-      <Navbar/>  
       <div
         className="glass"
         style={{
@@ -20,13 +38,11 @@ function Profile() {
         <br />
 
         <p>
-          Email:
-          {localStorage.getItem("email")}
+          <strong>Email:</strong> {email || "Not Available"}
         </p>
 
         <p>
-          Organization:
-          Demo Company
+          <strong>Organization:</strong> {organization || "Not Available"}
         </p>
 
         <p>

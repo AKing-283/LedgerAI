@@ -23,17 +23,15 @@ export default function Register() {
         organizationName,
         email,
         password
-      );    
-
-      alert(
-        "Registration Successful"
       );
 
+      alert("✅ Account created successfully! Please login to continue.");
+
+      // Redirect to login page
       navigate("/");
-    } catch {
-      alert(
-        "Registration Failed"
-      );
+
+    } catch (error) {
+      alert("❌ Registration Failed. Please try again.");
     }
   };
 

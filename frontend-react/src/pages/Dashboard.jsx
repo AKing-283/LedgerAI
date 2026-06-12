@@ -1,7 +1,55 @@
-import Navbar from "../components/Navbar";
+import { useEffect, useState } from "react";
 import StatCard from "../components/StatsCard";
 import ExpenseChart from "../components/ExpenseChart";
+import { getDocuments } from "../services/api";
+
 function Dashboard() {
+
+  const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [organizationName, setOrganizationName] = useState("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const docs = await getDocuments();
+        setDocuments(docs || []);
+      } catch (error) {
+        console.error("Failed to fetch documents");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+
+    const org = localStorage.getItem("organization_name");
+    if (org) {
+      setOrganizationName(org);
+    }
+  }, []);
+
+  const totalDocuments = documents.length;
+
+  const uniqueVendors = [
+    ...new Set(documents.map((doc) => doc.vendor).filter(Boolean))
+  ].length;
+
+  const totalAmount = documents.reduce((sum, doc) => {
+    return sum + (Number(doc.amount) || 0);
+  }, 0);
+
+  const latestUpload =
+    documents.length > 0
+      ? new Date(
+          Math.max(
+            ...documents.map((doc) =>
+              new Date(doc.created_at)
+            )
+          )
+        ).toLocaleDateString()
+      : "-";
+
   return (
     <div className="page-container">
       <div
@@ -23,7 +71,7 @@ function Dashboard() {
               marginTop: "8px"
             }}
           >
-            AI Powered Accounting Dashboard
+            {organizationName || "Your Organization"} • Real-time Accounting Overview
           </p>
         </div>
 
@@ -50,27 +98,27 @@ function Dashboard() {
         }}
       >
         <StatCard
-          title="Documents"
-          value="128"
+          title="Total Documents"
+          value={loading ? "..." : totalDocuments}
           icon="📄"
         />
 
         <StatCard
-          title="Invoices"
-          value="89"
-          icon="🧾"
-        />
-
-        <StatCard
-          title="GST Records"
-          value="45"
-          icon="📊"
-        />
-
-        <StatCard
           title="Vendors"
-          value="22"
+          value={loading ? "..." : uniqueVendors}
           icon="🏢"
+        />
+
+        <StatCard
+          title="Total Invoice Amount"
+          value={loading ? "..." : `₹${totalAmount.toLocaleString()}`}
+          icon="💰"
+        />
+
+        <StatCard
+          title="Latest Upload"
+          value={loading ? "..." : latestUpload}
+          icon="🕒"
         />
       </div>
 
@@ -157,40 +205,47 @@ function Dashboard() {
           Recent Activity
         </h2>
 
-        <table
-          style={{
-            width: "100%",
-            marginTop: "20px"
-          }}
-        >
-          <thead>
-            <tr>
-              <th>Invoice</th>
-              <th>Vendor</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
+        <div className="table-container" style={{ marginTop: "20px" }}>
+          <table>
+            <thead>
+              <tr>
+                <th>Filename</th>
+                <th>Vendor</th>
+                <th>Invoice</th>
+                <th>Amount</th>
+                <th>Date</th>
+              </tr>
+            </thead>
 
-          <tbody>
-            <tr>
-              <td>INV001</td>
-              <td>Amazon</td>
-              <td>₹5,200</td>
-            </tr>
-
-            <tr>
-              <td>INV002</td>
-              <td>Flipkart</td>
-              <td>₹2,900</td>
-            </tr>
-
-            <tr>
-              <td>INV003</td>
-              <td>Swiggy</td>
-              <td>₹890</td>
-            </tr>
-          </tbody>
-        </table>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan="5">Loading...</td>
+                </tr>
+              ) : documents.length === 0 ? (
+                <tr>
+                  <td colSpan="5">No documents found</td>
+                </tr>
+              ) : (
+                documents.slice(0, 5).map((doc, index) => (
+                  <tr key={index}>
+                    <td>{doc.filename || "-"}</td>
+                    <td>{doc.vendor || "-"}</td>
+                    <td>{doc.invoice_number || "-"}</td>
+                    <td>
+                      ₹{Number(doc.amount || 0).toLocaleString()}
+                    </td>
+                    <td>
+                      {doc.created_at
+                        ? new Date(doc.created_at).toLocaleDateString()
+                        : "-"}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
     </div>

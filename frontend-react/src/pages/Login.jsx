@@ -26,30 +26,35 @@ function Login() {
 
   const handleLogin =
     async () => {
+      try {
+        const result =
+          await login(
+            email,
+            password
+          );
 
-      const result =
-        await login(
-          email,
-          password
-        );
-
-      if (
-        result.access_token
-      ) {
-
-        localStorage.setItem(
-          "token",
+        if (
           result.access_token
-        );
+        ) {
 
-        localStorage.setItem(
-          "organization_id",
-          result.organization_id
-        );
+          localStorage.setItem(
+            "token",
+            result.access_token
+          );
 
-        navigate(
-          "/dashboard"
-        );
+          localStorage.setItem(
+            "organization_id",
+            result.organization_id
+          );
+
+          alert("✅ Login successful! Welcome back.");
+
+          navigate(
+            "/dashboard"
+          );
+        }
+      } catch (error) {
+        alert("❌ Invalid credentials. Please try again.");
       }
     };
 

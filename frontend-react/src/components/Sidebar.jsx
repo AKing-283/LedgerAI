@@ -54,7 +54,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
                 letterSpacing: "0.5px"
               }}
             >
-              AI Accountant
+              LedgerAI
             </h2>
           )}
 

@@ -1,8 +1,27 @@
 import { FiBell, FiUser } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { decodeToken } from "../services/api";
 
 function Navbar({ collapsed }) {
-  const email = localStorage.getItem("user_email") || "User";
-  const organization = localStorage.getItem("organization_name") || "Organization";
+
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("User");
+  const [organization, setOrganization] = useState("Organization");
+
+  useEffect(() => {
+    const decoded = decodeToken();
+
+    if (decoded) {
+      if (decoded.email) {
+        setEmail(decoded.email);
+      }
+
+      if (decoded.organization_name) {
+        setOrganization(decoded.organization_name);
+      }
+    }
+  }, []);
 
   return (
     <div
@@ -59,6 +78,7 @@ function Navbar({ collapsed }) {
         </div>
 
         <div
+          onClick={() => navigate("/profile")}
           style={{
             display: "flex",
             alignItems: "center",
@@ -66,7 +86,8 @@ function Navbar({ collapsed }) {
             background: "rgba(255,255,255,0.05)",
             padding: "8px 14px",
             borderRadius: "14px",
-            border: "1px solid rgba(255,255,255,0.08)"
+            border: "1px solid rgba(255,255,255,0.08)",
+            cursor: "pointer"
           }}
         >
           <FiUser />
