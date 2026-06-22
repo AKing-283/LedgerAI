@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://ai-accountant-copilot-102553128784.europe-west1.run.app",
+  baseURL: "http://127.0.0.1:8000",
 });
 
 API.interceptors.request.use(

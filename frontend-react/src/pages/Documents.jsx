@@ -54,32 +54,59 @@ function Documents() {
         {docs.map((doc) => (
 
           <div
-            key={doc.id}
-            className="glass"
+          style={{
+            marginTop: "12px"
+          }}
+        >
+
+          <p>
+            <strong>
+              Vendor:
+            </strong>
+            {" "}
+            {doc.vendor || "-"}
+          </p>
+
+          <p>
+            <strong>
+              Invoice No:
+            </strong>
+            {" "}
+            {doc.invoice_number || "-"}
+          </p>
+
+          <p>
+            <strong>
+              GST Number:
+            </strong>
+            {doc.gst_number || "Not Available"}
+          </p>
+
+          <p>
+            <strong>
+              Invoice Date:
+            </strong>
+            {" "}
+            {doc.invoice_date || "-"}
+          </p>
+
+          <p
             style={{
-              padding: "20px",
-              borderRadius: "16px"
+              fontSize: "18px",
+              fontWeight: "bold",
+              color: "#22c55e"
             }}
           >
-            <h3>
-              {doc.filename}
-            </h3>
+            Total Amount:
+            {" "}
+            ₹{
+              Number(
+                doc.amount || 0
+              ).toLocaleString()
+            }
+          </p>
 
-            <p>
-              Vendor:
-              {doc.vendor}
-            </p>
-
-            <p>
-              Invoice:
-              {doc.invoice_number}
-            </p>
-
-            <p>
-              Amount:
-              ₹{doc.amount}
-            </p>
-          </div>
+        </div>
 
         ))}
       </div>

@@ -40,7 +40,7 @@ class Document(Base):
 
     invoice_number = Column(String)
 
-    gst_number = Column(String)
+    gst_number = Column(String, nullable=True)
 
     amount = Column(Float)
 
