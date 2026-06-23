@@ -8,6 +8,7 @@ from app.routers.chat import router as chat_router
 from app.routers.auth import router as auth_router
 from app.routers.documents import router as documents_router
 from app.routers.debug import router as debug_router
+from app.routers.notifications import router as notifications_router
 
 from app.services.qdrant_service import create_collection
 
@@ -22,10 +23,8 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "*"
-        # Later replace with:
-        # "http://localhost:5173",
-        # "https://your-frontend-domain.com"
+        "http://localhost:5173",
+        "http://127.0.0.1:5173"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -62,6 +61,7 @@ app.include_router(upload_router)
 app.include_router(chat_router)
 app.include_router(documents_router)
 app.include_router(debug_router)
+app.include_router(notifications_router)
 
 # ---------------------------
 # Health Check

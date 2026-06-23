@@ -7,6 +7,11 @@ from app.auth.auth_dependency import (
 
 from app.db.session import SessionLocal
 from app.db.models import Document
+from app.services.notification_service import create_notification
+from app.services.postgres_service import get_db
+from sqlalchemy.orm import Session
+from uuid import UUID
+from fastapi import HTTPException
 
 router = APIRouter(tags=["Documents"])
 
@@ -41,3 +46,36 @@ def get_documents(
         }
         for doc in docs
     ]
+
+
+@router.delete("/documents/{document_id}")
+def delete_document(
+    document_id: UUID,
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+
+    organization_id = current_user["organization_id"]
+
+    document = db.query(Document).filter(
+        Document.id == document_id,
+        Document.organization_id == organization_id
+    ).first()
+
+    if not document:
+        raise HTTPException(status_code=404, detail="Document not found")
+
+    filename = document.filename
+
+    db.delete(document)
+    db.commit()
+
+    create_notification(
+        db=db,
+        organization_id=organization_id,
+        title="Document Deleted",
+        message=f"{filename} was removed",
+        type="DOCUMENT_DELETED"
+    )
+
+    return {"message": "Document deleted successfully"}

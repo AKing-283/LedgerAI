@@ -17,6 +17,9 @@ from app.services.document_metadata_service import (
 )
 
 from app.auth.auth_dependency import get_current_user
+from app.services.notification_service import create_notification
+from app.services.postgres_service import get_db
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
@@ -31,7 +34,8 @@ os.makedirs(
 @router.post("/upload")
 async def upload_pdf(
     file: UploadFile = File(...),
-    current_user=Depends(get_current_user)
+    current_user=Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
 
     print("\n" + "=" * 80)
@@ -80,6 +84,15 @@ async def upload_pdf(
     print("\nGST FOUND BY REGEX:")
     print(extracted_gst)
 
+    if extracted_gst:
+        create_notification(
+            db=db,
+            organization_id=organization_id,
+            title="GST Detected",
+            message=f"GST {extracted_gst} extracted successfully",
+            type="GST_EXTRACTED"
+        )
+
     # --------------------------------------------------
     # METADATA EXTRACTION
     # --------------------------------------------------
@@ -122,6 +135,18 @@ async def upload_pdf(
         organization_id=organization_id,
         document_id=document.id,
         chunks=chunks
+    )
+
+    # --------------------------------------------------
+    # NOTIFICATION: DOCUMENT UPLOADED
+    # --------------------------------------------------
+
+    create_notification(
+        db=db,
+        organization_id=organization_id,
+        title="Document Uploaded",
+        message=f"{file.filename} uploaded successfully",
+        type="DOCUMENT_UPLOADED"
     )
 
     print("\nUPLOAD COMPLETED")

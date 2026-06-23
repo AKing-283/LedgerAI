@@ -13,7 +13,16 @@ from app.auth.jwt_service import (
 )
 from app.db.models import User
 from app.db.models import Organization
+from app.services.notification_service import create_notification
 router = APIRouter()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
 def save_document(
     organization_id,
     filename,
@@ -43,6 +52,13 @@ def save_document(
     ).first()
 
     if existing:
+        create_notification(
+            db=db,
+            organization_id=organization_id,
+            title="Duplicate Invoice",
+            message=f"Invoice {metadata.get('invoice_number', '')} already exists",
+            type="DUPLICATE_INVOICE"
+        )
         db.close()
         return existing
     db.add(document)

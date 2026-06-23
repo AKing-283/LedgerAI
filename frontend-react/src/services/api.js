@@ -118,4 +118,47 @@ export const decodeToken = () => {
   }
 };
 
+/* ==============================
+   NOTIFICATIONS API
+================================ */
+
+export const getNotifications =
+  async () => {
+    const res =
+      await API.get(
+        "/notifications"
+      );
+    return res.data;
+  };
+
+export const getUnreadCount =
+  async () => {
+    const res =
+      await API.get(
+        "/notifications/unread-count"
+      );
+    return res.data.unread_count;
+  };
+
+export const markNotificationRead =
+  async (id) => {
+    await API.put(
+      `/notifications/${id}/read`
+    );
+  };
+
+export const markAllNotificationsRead =
+  async () => {
+    await API.put(
+      "/notifications/read-all"
+    );
+  };
+
+export const deleteNotification =
+  async (id) => {
+    await API.delete(
+      `/notifications/${id}`
+    );
+  };
+
 export default API;

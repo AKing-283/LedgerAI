@@ -18,15 +18,9 @@ function Upload() {
         token
       );
 
-    // Increment notification count
-    const current =
-      Number(localStorage.getItem("notifications_count")) || 0;
-
-    const updated = current + 1;
-
-    localStorage.setItem(
-      "notifications_count",
-      String(updated)
+    // ✅ Trigger navbar refresh immediately
+    window.dispatchEvent(
+      new Event("notification-update")
     );
 
     alert(

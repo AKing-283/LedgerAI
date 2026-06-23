@@ -39,16 +39,7 @@ function Dashboard() {
     return sum + (Number(doc.amount) || 0);
   }, 0);
 
-  const latestUpload =
-    documents.length > 0
-      ? new Date(
-          Math.max(
-            ...documents.map((doc) =>
-              new Date(doc.created_at)
-            )
-          )
-        ).toLocaleDateString()
-      : "-";
+  // Latest Upload removed as requested
 
   return (
     <div className="page-container">
@@ -115,11 +106,6 @@ function Dashboard() {
           icon="💰"
         />
 
-        <StatCard
-          title="Latest Upload"
-          value={loading ? "..." : latestUpload}
-          icon="🕒"
-        />
       </div>
 
       <div
@@ -174,19 +160,23 @@ function Dashboard() {
             }}
           >
             <li>
-              GST Expenses up 12%
+              Total Spend: ₹{totalAmount.toLocaleString()}
             </li>
 
             <li>
-              Top Vendor: Amazon
+              Top Vendor: {uniqueVendors > 0 
+                ? [...new Set(documents.map(d => d.vendor).filter(Boolean))][0] 
+                : "-"}
             </li>
 
             <li>
-              Duplicate Invoice Found
+              Documents Processed: {totalDocuments}
             </li>
 
             <li>
-              Tax Saving Opportunity
+              Average Invoice Value: ₹{totalDocuments > 0 
+                ? Math.round(totalAmount / totalDocuments).toLocaleString() 
+                : 0}
             </li>
           </ul>
         </div>
@@ -227,8 +217,13 @@ function Dashboard() {
                   <td colSpan="5">No documents found</td>
                 </tr>
               ) : (
-                documents.slice(0, 5).map((doc, index) => (
-                  <tr key={index}>
+                documents
+                  .sort((a, b) =>
+                    new Date(b.created_at) - new Date(a.created_at)
+                  )
+                  .slice(0, 5)
+                  .map((doc) => (
+                  <tr key={doc.id}>
                     <td>{doc.filename || "-"}</td>
                     <td>{doc.vendor || "-"}</td>
                     <td>{doc.invoice_number || "-"}</td>

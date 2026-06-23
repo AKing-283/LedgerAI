@@ -5,7 +5,7 @@ from datetime import UTC, datetime
 from sqlalchemy import Column
 from sqlalchemy import String
 from sqlalchemy import DateTime
-from sqlalchemy import Text, Integer, Float
+from sqlalchemy import Text, Integer, Float, Boolean
 
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy import ForeignKey
@@ -87,3 +87,33 @@ class Organization(Base):
                 default=uuid.uuid4)
 
     name = Column(String, nullable=False)
+
+
+class Notification(Base):
+
+    __tablename__ = "notifications"
+
+    id = Column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4
+    )
+
+    organization_id = Column(
+        UUID(as_uuid=True),
+        ForeignKey("organizations.id"),
+        nullable=False
+    )
+
+    title = Column(String, nullable=False)
+
+    message = Column(Text, nullable=False)
+
+    type = Column(String, nullable=False)
+
+    is_read = Column(Boolean, nullable=False, default=False)
+
+    created_at = Column(
+        DateTime,
+        default=datetime.now(UTC)
+    )
