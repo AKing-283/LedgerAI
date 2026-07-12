@@ -161,4 +161,14 @@ export const deleteNotification =
     );
   };
 
+export const forgotPassword = async (email) => {
+  const res = await API.post("/auth/forgot-password", { email });
+  return res.data;
+};
+
+export const resetPassword = async (token, new_password) => {
+  const res = await API.post("/auth/reset-password", { token, new_password });
+  return res.data;
+};
+
 export default API;

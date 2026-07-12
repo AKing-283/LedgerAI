@@ -78,6 +78,9 @@ class User(Base):
         nullable=False
     )
 
+    reset_token = Column(String, nullable=True)
+    reset_token_expires_at = Column(DateTime, nullable=True)
+
 class Organization(Base):
 
     __tablename__ = "organizations"

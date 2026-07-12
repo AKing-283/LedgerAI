@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from app.db.session import SessionLocal
 from app.db.models import Document
 from sqlalchemy import or_
@@ -105,6 +107,19 @@ def get_user_by_email(email):
     return user
 
 
+def get_organization_by_id(org_id):
+
+    db = SessionLocal()
+
+    org = db.query(Organization).filter(
+        Organization.id == org_id
+    ).first()
+
+    db.close()
+
+    return org
+
+
 def create_organization(
     name: str
 ):
@@ -124,6 +139,51 @@ def create_organization(
     db.close()
 
     return organization
+
+def save_reset_token(user_id, token, expires_at):
+
+    db = SessionLocal()
+
+    db.query(User).filter(
+        User.id == user_id
+    ).update({
+        "reset_token": token,
+        "reset_token_expires_at": expires_at
+    })
+
+    db.commit()
+    db.close()
+
+
+def get_user_by_reset_token(token):
+
+    db = SessionLocal()
+
+    user = db.query(User).filter(
+        User.reset_token == token,
+        User.reset_token_expires_at > datetime.utcnow()
+    ).first()
+
+    db.close()
+
+    return user
+
+
+def update_password(user_id, new_hash):
+
+    db = SessionLocal()
+
+    db.query(User).filter(
+        User.id == user_id
+    ).update({
+        "password_hash": new_hash,
+        "reset_token": None,
+        "reset_token_expires_at": None
+    })
+
+    db.commit()
+    db.close()
+
 
 def create_user(
     email,

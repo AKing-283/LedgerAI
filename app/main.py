@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -13,7 +16,7 @@ from app.routers.notifications import router as notifications_router
 from app.services.qdrant_service import create_collection
 
 app = FastAPI(
-    title="AI Accountant Copilot"
+    title="LedgerAI"
 )
 
 # ---------------------------
@@ -23,8 +26,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:5173",
-        "http://127.0.0.1:5173"
+        "*"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -72,7 +74,7 @@ def home():
 
     return {
         "status": "running",
-        "service": "AI Accountant Copilot"
+        "service": "LedgerAI"
     }
 
 @app.get("/health")

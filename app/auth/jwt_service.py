@@ -10,7 +10,7 @@ ALGORITHM = "HS256"
 TOKEN_EXPIRE_HOURS = 24
 
 
-def create_token(user):
+def create_token(user, organization_name=""):
 
     payload = {
         "user_id": str(user.id),
@@ -18,6 +18,7 @@ def create_token(user):
             user.organization_id
         ),
         "email": user.email,
+        "organization_name": organization_name,
         "exp": datetime.utcnow()
         + timedelta(
             hours=TOKEN_EXPIRE_HOURS
