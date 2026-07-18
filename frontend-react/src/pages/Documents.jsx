@@ -1,116 +1,107 @@
-import {
-  useEffect,
-  useState
-} from "react";
-
-import Navbar from "../components/Navbar";
-
-import {
-  getDocuments
-} from "../services/api";
+import { useEffect, useState } from "react";
+import { getDocuments } from "../services/api";
 
 function Documents() {
-
-  const [docs, setDocs] =
-    useState([]);
+  const [documents, setDocuments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
-    const load = async () => {
-
-      const token =
-        localStorage.getItem(
-          "token"
-        );
-
-      const data =
-        await getDocuments(
-          token
-        );
-
-      setDocs(data);
+    const fetchData = async () => {
+      try {
+        const docs = await getDocuments();
+        setDocuments(docs || []);
+      } catch (error) {
+        console.error("Failed to fetch documents");
+      } finally {
+        setLoading(false);
+      }
     };
 
-    load();
-
+    fetchData();
   }, []);
 
   return (
-    <div className="page-container">
-
-      <h1
-        className="gradient-text"
-      >
-        Documents
-      </h1>
-
+    <div>
       <div
+        className="glass-card"
         style={{
-          display: "grid",
-          gap: "20px",
-          marginTop: "25px"
+          padding: "32px",
         }}
       >
-        {docs.map((doc) => (
-
-          <div
+        <div
           style={{
-            marginTop: "12px"
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "24px",
           }}
         >
-
-          <p>
-            <strong>
-              Vendor:
-            </strong>
-            {" "}
-            {doc.vendor || "-"}
-          </p>
-
-          <p>
-            <strong>
-              Invoice No:
-            </strong>
-            {" "}
-            {doc.invoice_number || "-"}
-          </p>
-
-          <p>
-            <strong>
-              GST Number:
-            </strong>
-            {doc.gst_number || "Not Available"}
-          </p>
-
-          <p>
-            <strong>
-              Invoice Date:
-            </strong>
-            {" "}
-            {doc.invoice_date || "-"}
-          </p>
-
-          <p
+          <h1
+            className="gradient-text"
             style={{
-              fontSize: "18px",
-              fontWeight: "bold",
-              color: "#22c55e"
+              fontSize: "24px",
+              fontWeight: 700,
             }}
           >
-            Total Amount:
-            {" "}
-            ₹{
-              Number(
-                doc.amount || 0
-              ).toLocaleString()
-            }
-          </p>
-
+            Documents
+          </h1>
+          <span
+            style={{
+              fontSize: "14px",
+              color: "rgba(255,255,255,0.5)",
+              padding: "6px 14px",
+              borderRadius: "10px",
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.08)",
+            }}
+          >
+            {documents.length} total
+          </span>
         </div>
 
-        ))}
+        <div className="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Filename</th>
+                <th>Vendor</th>
+                <th>Invoice #</th>
+                <th>Amount</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <tr>
+                  <td colSpan="5" style={{ padding: "24px", textAlign: "center", color: "rgba(255,255,255,0.4)" }}>
+                    Loading documents...
+                  </td>
+                </tr>
+              ) : documents.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{ padding: "24px", textAlign: "center", color: "rgba(255,255,255,0.4)" }}>
+                    No documents uploaded yet. Go to Upload to add documents.
+                  </td>
+                </tr>
+              ) : (
+                documents
+                  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                  .map((doc) => (
+                    <tr key={doc.id}>
+                      <td style={{ color: "rgba(255,255,255,0.8)" }}>{doc.filename || "-"}</td>
+                      <td style={{ color: "rgba(255,255,255,0.8)" }}>{doc.vendor || "-"}</td>
+                      <td style={{ color: "rgba(255,255,255,0.8)" }}>{doc.invoice_number || "-"}</td>
+                      <td style={{ color: "rgba(255,255,255,0.8)" }}>₹{Number(doc.amount || 0).toLocaleString()}</td>
+                      <td style={{ color: "rgba(255,255,255,0.5)" }}>
+                        {doc.created_at ? new Date(doc.created_at).toLocaleDateString() : "-"}
+                      </td>
+                    </tr>
+                  ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-
     </div>
   );
 }

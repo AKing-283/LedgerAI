@@ -5,28 +5,38 @@ function StatCard({
 }) {
   return (
     <div
-      className="glass"
+      className="glass-card"
       style={{
         padding: "25px",
-        borderRadius: "20px",
         minHeight: "140px"
       }}
     >
       <h3
         style={{
-          opacity: 0.7,
-          marginBottom: "15px"
+          color: "rgba(255,255,255,0.6)",
+          fontSize: "14px",
+          fontWeight: 500,
+          marginBottom: "12px"
         }}
       >
         {title}
       </h3>
 
-      <h1>{value}</h1>
+      <h1
+        style={{
+          fontSize: "28px",
+          fontWeight: 700,
+          color: "#ffffff"
+        }}
+      >
+        {value}
+      </h1>
 
       <div
         style={{
-          fontSize: "40px",
-          marginTop: "10px"
+          fontSize: "32px",
+          marginTop: "12px",
+          opacity: 0.5
         }}
       >
         {icon}

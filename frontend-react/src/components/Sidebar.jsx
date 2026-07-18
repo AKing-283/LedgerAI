@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { FiHome, FiUpload, FiFileText, FiMessageSquare, FiSettings, FiLogOut, FiMenu } from "react-icons/fi";
 
 export default function Sidebar({ collapsed, setCollapsed }) {
@@ -7,7 +7,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("organization_id");
-    navigate("/");
+    navigate("/login");
   };
 
   const linkStyle = ({ isActive }) => ({
@@ -47,15 +47,21 @@ export default function Sidebar({ collapsed, setCollapsed }) {
           }}
         >
           {!collapsed && (
-            <h2
-              style={{
-                fontWeight: 600,
-                fontSize: "18px",
-                letterSpacing: "0.5px"
-              }}
+            <Link
+              to="/"
+              style={{ textDecoration: "none" }}
             >
-              LedgerAI
-            </h2>
+              <h2
+                className="gradient-text"
+                style={{
+                  fontWeight: 700,
+                  fontSize: "18px",
+                  letterSpacing: "0.5px"
+                }}
+              >
+                LedgerAI
+              </h2>
+            </Link>
           )}
 
           <FiMenu

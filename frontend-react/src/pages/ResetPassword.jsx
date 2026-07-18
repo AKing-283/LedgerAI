@@ -228,7 +228,7 @@ export default function ResetPassword() {
         )}
 
         <p style={{ textAlign: "center", marginTop: "24px", color: "rgba(255,255,255,0.5)", fontSize: "14px" }}>
-          <Link to="/" style={{ color: "#818cf8", fontWeight: 600, textDecoration: "none" }}>
+          <Link to="/login" style={{ color: "#818cf8", fontWeight: 600, textDecoration: "none" }}>
             Back to Sign in
           </Link>
         </p>

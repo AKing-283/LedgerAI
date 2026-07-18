@@ -1,17 +1,20 @@
-import Navbar from "../components/Navbar";
-
 function Billing() {
   return (
-    <div className="page-container">
-      <Navbar/>  
+    <div>
       <div
-        className="glass"
+        className="glass-card"
         style={{
           padding: "30px",
-          borderRadius: "20px"
         }}
       >
-        <h1>
+        <h1
+          className="gradient-text"
+          style={{
+            fontSize: "24px",
+            fontWeight: 700,
+            marginBottom: "24px",
+          }}
+        >
           Pricing Plans
         </h1>
 
@@ -21,56 +24,104 @@ function Billing() {
             gridTemplateColumns:
               "repeat(auto-fit,minmax(280px,1fr))",
             gap: "20px",
-            marginTop: "25px"
           }}
         >
 
           <div
-            className="glass"
+            className="glass-card"
             style={{
-              padding: "25px",
-              borderRadius: "20px"
+              padding: "30px",
             }}
           >
-            <h2>Free</h2>
+            <h2
+              style={{
+                fontSize: "18px",
+                fontWeight: 600,
+                color: "#ffffff",
+                marginBottom: "12px",
+              }}
+            >
+              Free
+            </h2>
 
-            <h1>₹0</h1>
+            <h1
+              style={{
+                fontSize: "36px",
+                fontWeight: 700,
+                color: "#ffffff",
+                marginBottom: "20px",
+              }}
+            >
+              ₹0
+            </h1>
 
-            <ul>
-              <li>100 Documents</li>
-              <li>Basic AI Chat</li>
+            <ul
+              style={{
+                listStyle: "none",
+                padding: 0,
+                color: "rgba(255,255,255,0.7)",
+                fontSize: "14px",
+                lineHeight: 2,
+              }}
+            >
+              <li>✓ 100 Documents</li>
+              <li>✓ Basic AI Chat</li>
             </ul>
           </div>
 
           <div
-            className="glass"
+            className="glass-card"
             style={{
-              padding: "25px",
-              borderRadius: "20px",
-              border:
-                "2px solid #6366f1"
+              padding: "30px",
+              border: "2px solid #6366f1",
+              position: "relative",
             }}
           >
-            <h2>Pro</h2>
+            <h2
+              style={{
+                fontSize: "18px",
+                fontWeight: 600,
+                color: "#ffffff",
+                marginBottom: "12px",
+              }}
+            >
+              Pro
+            </h2>
 
-            <h1>₹999/mo</h1>
+            <h1
+              style={{
+                fontSize: "36px",
+                fontWeight: 700,
+                color: "#ffffff",
+                marginBottom: "20px",
+              }}
+            >
+              ₹999/mo
+            </h1>
 
-            <ul>
-              <li>Unlimited Docs</li>
-              <li>Advanced AI</li>
-              <li>GST Analytics</li>
-              <li>Vendor Reports</li>
+            <ul
+              style={{
+                listStyle: "none",
+                padding: 0,
+                color: "rgba(255,255,255,0.7)",
+                fontSize: "14px",
+                lineHeight: 2,
+              }}
+            >
+              <li>✓ Unlimited Docs</li>
+              <li>✓ Advanced AI</li>
+              <li>✓ GST Analytics</li>
+              <li>✓ Vendor Reports</li>
             </ul>
 
             <button
+              className="btn-primary"
               style={{
-                marginTop: "15px",
+                marginTop: "20px",
                 width: "100%",
                 padding: "12px",
-                background:
-                  "#6366f1",
-                border: "none",
-                color: "white"
+                fontSize: "15px",
+                cursor: "pointer",
               }}
             >
               Upgrade

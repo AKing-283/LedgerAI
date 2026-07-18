@@ -5,6 +5,7 @@ import {
   Navigate
 } from "react-router-dom";
 
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -29,6 +30,11 @@ function App() {
 
         <Route
           path="/"
+          element={<Home />}
+        />
+
+        <Route
+          path="/login"
           element={<Login />}
         />
 
@@ -130,7 +136,9 @@ function App() {
             path="/billing"
             element={
               <ProtectedRoute>
-              <Billing />
+                <Layout>
+                  <Billing />
+                </Layout>
               </ProtectedRoute>
             }
           />

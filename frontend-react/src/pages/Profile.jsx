@@ -1,118 +1,152 @@
 import { useEffect, useState } from "react";
 import { decodeToken } from "../services/api";
+import { FiUser, FiMail, FiBriefcase } from "react-icons/fi";
 
 function Profile() {
-
-  const [email, setEmail] = useState("");
-  const [organization, setOrganization] = useState("");
+  const [user, setUser] = useState({
+    email: "N/A",
+    organization_name: "N/A",
+  });
 
   useEffect(() => {
     const decoded = decodeToken();
-
     if (decoded) {
-      if (decoded.email) {
-        setEmail(decoded.email);
-      }
-
-      if (decoded.organization_name) {
-        setOrganization(decoded.organization_name);
-      }
+      setUser({
+        email: decoded.email || "N/A",
+        organization_name: decoded.organization_name || "N/A",
+      });
     }
   }, []);
 
   return (
-    <div className="page-container">
+    <div>
       <div
-        className="glass"
+        className="glass-card"
         style={{
-          maxWidth: "800px",
-          margin: "auto",
+          maxWidth: "600px",
+          margin: "0 auto",
           padding: "40px",
-          borderRadius: "24px"
         }}
       >
-        <h1 style={{ marginBottom: "10px" }}>
-          Account Overview
-        </h1>
-
-        <p style={{ opacity: 0.6, marginBottom: "30px" }}>
-          Manage your accountant profile and organization details.
-        </p>
-
         <div
           style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: "20px"
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+            marginBottom: "32px",
           }}
         >
           <div
             style={{
-              background: "rgba(255,255,255,0.04)",
-              padding: "20px",
-              borderRadius: "18px",
-              border: "1px solid rgba(255,255,255,0.08)"
+              width: "64px",
+              height: "64px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "24px",
+              fontWeight: 700,
             }}
           >
-            <h4 style={{ marginBottom: "8px", opacity: 0.7 }}>
-              Email Address
-            </h4>
-            <p style={{ fontSize: "16px" }}>
-              {email || "Not Available"}
-            </p>
+            {user.organization_name.charAt(0).toUpperCase()}
           </div>
-
-          <div
-            style={{
-              background: "rgba(255,255,255,0.04)",
-              padding: "20px",
-              borderRadius: "18px",
-              border: "1px solid rgba(255,255,255,0.08)"
-            }}
-          >
-            <h4 style={{ marginBottom: "8px", opacity: 0.7 }}>
-              Organization
-            </h4>
-            <p style={{ fontSize: "16px" }}>
-              {organization || "Not Available"}
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "rgba(255,255,255,0.04)",
-              padding: "20px",
-              borderRadius: "18px",
-              border: "1px solid rgba(255,255,255,0.08)"
-            }}
-          >
-            <h4 style={{ marginBottom: "8px", opacity: 0.7 }}>
-              Subscription Plan
-            </h4>
-            <p style={{ fontSize: "16px" }}>
-              Free Tier
-            </p>
-          </div>
-
-          <div
-            style={{
-              background: "rgba(255,255,255,0.04)",
-              padding: "20px",
-              borderRadius: "18px",
-              border: "1px solid rgba(255,255,255,0.08)"
-            }}
-          >
-            <h4 style={{ marginBottom: "8px", opacity: 0.7 }}>
-              Account Status
-            </h4>
-            <p style={{ fontSize: "16px", color: "#22c55e" }}>
-              Active
+          <div>
+            <h1
+              className="gradient-text"
+              style={{
+                fontSize: "24px",
+                fontWeight: 700,
+              }}
+            >
+              Profile
+            </h1>
+            <p
+              style={{
+                color: "rgba(255,255,255,0.5)",
+                fontSize: "14px",
+                marginTop: "4px",
+              }}
+            >
+              Your account details
             </p>
           </div>
         </div>
 
-      </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "16px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "14px",
+              padding: "16px",
+              borderRadius: "14px",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}
+          >
+            <FiBriefcase size={20} style={{ color: "#818cf8", flexShrink: 0 }} />
+            <div>
+              <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)" }}>
+                Organization
+              </div>
+              <div style={{ fontSize: "15px", fontWeight: 500, color: "#ffffff" }}>
+                {user.organization_name}
+              </div>
+            </div>
+          </div>
 
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "14px",
+              padding: "16px",
+              borderRadius: "14px",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}
+          >
+            <FiMail size={20} style={{ color: "#818cf8", flexShrink: 0 }} />
+            <div>
+              <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)" }}>
+                Email
+              </div>
+              <div style={{ fontSize: "15px", fontWeight: 500, color: "#ffffff" }}>
+                {user.email}
+              </div>
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "14px",
+              padding: "16px",
+              borderRadius: "14px",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}
+          >
+            <FiUser size={20} style={{ color: "#818cf8", flexShrink: 0 }} />
+            <div>
+              <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)" }}>
+                Role
+              </div>
+              <div style={{ fontSize: "15px", fontWeight: 500, color: "#ffffff" }}>
+                Organization Member
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

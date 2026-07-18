@@ -174,7 +174,7 @@ export default function ForgotPassword() {
         >
           Remember your password?{" "}
           <Link
-            to="/"
+            to="/login"
             style={{
               color: "#818cf8",
               fontWeight: 600,

@@ -39,7 +39,7 @@ function Dashboard() {
   }, 0);
 
   return (
-    <div style={{ padding: "24px", background: "#ffffff", minHeight: "100vh" }}>
+    <div style={{ padding: "0" }}>
       {/* Header */}
       <div
         style={{
@@ -50,10 +50,10 @@ function Dashboard() {
         }}
       >
         <div>
-          <h1 style={{ fontSize: "26px", fontWeight: 700, color: "#111827", margin: 0 }}>
-            Welcome Back 👋
+          <h1 style={{ fontSize: "26px", fontWeight: 700, color: "#ffffff", margin: 0 }}>
+            Welcome Back
           </h1>
-          <p style={{ color: "#6b7280", marginTop: "6px", fontSize: "14px" }}>
+          <p style={{ color: "rgba(255,255,255,0.5)", marginTop: "6px", fontSize: "14px" }}>
             {organizationName || "Your Organization"} &bull; Real-time Accounting Overview
           </p>
         </div>
@@ -61,14 +61,13 @@ function Dashboard() {
         <button
           style={{
             padding: "10px 20px",
-            borderRadius: "10px",
-            border: "1px solid #e5e7eb",
-            background: "#ffffff",
-            color: "#374151",
+            borderRadius: "14px",
+            border: "1px solid rgba(255,255,255,0.15)",
+            background: "rgba(255,255,255,0.05)",
+            color: "rgba(255,255,255,0.8)",
             cursor: "pointer",
             fontSize: "14px",
             fontWeight: 500,
-            boxShadow: "0 1px 2px rgba(0,0,0,0.05)"
           }}
         >
           Upgrade Pro
@@ -105,19 +104,16 @@ function Dashboard() {
 
       {/* AI Insights */}
       <div
+        className="glass-card"
         style={{
-          background: "#ffffff",
-          border: "1px solid #e5e7eb",
-          borderRadius: "14px",
           padding: "24px",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
           marginBottom: "24px"
         }}
       >
-        <h2 style={{ fontSize: "16px", fontWeight: 600, color: "#111827", margin: 0 }}>
+        <h2 style={{ fontSize: "16px", fontWeight: 600, color: "#ffffff", margin: 0 }}>
           AI Insights
         </h2>
-        <ul style={{ marginTop: "20px", lineHeight: "2.2", color: "#374151", fontSize: "14px", paddingLeft: "18px" }}>
+        <ul style={{ marginTop: "20px", lineHeight: "2.2", color: "rgba(255,255,255,0.7)", fontSize: "14px", paddingLeft: "18px" }}>
           <li>Total Spend: ₹{totalAmount.toLocaleString()}</li>
           <li>
             Top Vendor: {uniqueVendors > 0
@@ -135,49 +131,46 @@ function Dashboard() {
 
       {/* Recent Activity */}
       <div
+        className="glass-card"
         style={{
-          background: "#ffffff",
-          border: "1px solid #e5e7eb",
-          borderRadius: "14px",
-          padding: "24px",
-          boxShadow: "0 1px 3px rgba(0,0,0,0.04)"
+          padding: "24px"
         }}
       >
-        <h2 style={{ fontSize: "16px", fontWeight: 600, color: "#111827", margin: 0 }}>
+        <h2 style={{ fontSize: "16px", fontWeight: 600, color: "#ffffff", margin: 0 }}>
           Recent Activity
         </h2>
 
         <div style={{ marginTop: "16px", overflowX: "auto" }}>
           <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "14px" }}>
             <thead>
-              <tr style={{ borderBottom: "1px solid #e5e7eb" }}>
-                <th style={{ padding: "12px 16px", textAlign: "left", color: "#6b7280", fontWeight: 500, fontSize: "13px" }}>Filename</th>
-                <th style={{ padding: "12px 16px", textAlign: "left", color: "#6b7280", fontWeight: 500, fontSize: "13px" }}>Vendor</th>
-                <th style={{ padding: "12px 16px", textAlign: "left", color: "#6b7280", fontWeight: 500, fontSize: "13px" }}>Invoice</th>
-                <th style={{ padding: "12px 16px", textAlign: "left", color: "#6b7280", fontWeight: 500, fontSize: "13px" }}>Amount</th>
-                <th style={{ padding: "12px 16px", textAlign: "left", color: "#6b7280", fontWeight: 500, fontSize: "13px" }}>Date</th>
+              <tr style={{ borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+                <th style={{ padding: "12px 16px", textAlign: "left", color: "rgba(255,255,255,0.5)", fontWeight: 500, fontSize: "13px" }}>Filename</th>
+                <th style={{ padding: "12px 16px", textAlign: "left", color: "rgba(255,255,255,0.5)", fontWeight: 500, fontSize: "13px" }}>Vendor</th>
+                <th style={{ padding: "12px 16px", textAlign: "left", color: "rgba(255,255,255,0.5)", fontWeight: 500, fontSize: "13px" }}>Invoice</th>
+                <th style={{ padding: "12px 16px", textAlign: "left", color: "rgba(255,255,255,0.5)", fontWeight: 500, fontSize: "13px" }}>Amount</th>
+                <th style={{ padding: "12px 16px", textAlign: "left", color: "rgba(255,255,255,0.5)", fontWeight: 500, fontSize: "13px" }}>Date</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="5" style={{ padding: "16px", textAlign: "center", color: "#9ca3af" }}>Loading...</td>
+                  <td colSpan="5" style={{ padding: "16px", textAlign: "center", color: "rgba(255,255,255,0.4)" }}>Loading...</td>
                 </tr>
               ) : documents.length === 0 ? (
                 <tr>
-                  <td colSpan="5" style={{ padding: "16px", textAlign: "center", color: "#9ca3af" }}>No documents found</td>
+                  <td colSpan="5" style={{ padding: "16px", textAlign: "center", color: "rgba(255,255,255,0.4)" }}>No documents found</td>
                 </tr>
               ) : (
                 documents
                   .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
                   .slice(0, 5)
                   .map((doc) => (
-                    <tr key={doc.id} style={{ borderBottom: "1px solid #f3f4f6" }}>
-                      <td style={{ padding: "12px 16px", color: "#374151" }}>{doc.filename || "-"}</td>
-                      <td style={{ padding: "12px 16px", color: "#374151" }}>{doc.vendor || "-"}</td>
-                      <td style={{ padding: "12px 16px", color: "#374151" }}>{doc.invoice_number || "-"}</td>
-                      <td style={{ padding: "12px 16px", color: "#374151" }}>₹{Number(doc.amount || 0).toLocaleString()}</td>
-                      <td style={{ padding: "12px 16px", color: "#6b7280" }}>
+                    <tr key={doc.id} style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+                      <td style={{ padding: "12px 16px", color: "rgba(255,255,255,0.8)" }}>{doc.filename || "-"}</td>
+                      <td style={{ padding: "12px 16px", color: "rgba(255,255,255,0.8)" }}>{doc.vendor || "-"}</td>
+                      <td style={{ padding: "12px 16px", color: "rgba(255,255,255,0.8)" }}>{doc.invoice_number || "-"}</td>
+                      <td style={{ padding: "12px 16px", color: "rgba(255,255,255,0.8)" }}>₹{Number(doc.amount || 0).toLocaleString()}</td>
+                      <td style={{ padding: "12px 16px", color: "rgba(255,255,255,0.5)" }}>
                         {doc.created_at ? new Date(doc.created_at).toLocaleDateString() : "-"}
                       </td>
                     </tr>

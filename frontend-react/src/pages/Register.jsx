@@ -53,7 +53,7 @@ export default function Register() {
       setSuccess("Account created successfully! Redirecting to login...");
 
       setTimeout(() => {
-        navigate("/");
+        navigate("/login");
       }, 1500);
     } catch (error) {
       if (error.response && error.response.data && error.response.data.detail) {
@@ -326,7 +326,7 @@ export default function Register() {
         >
           Already have an account?{" "}
           <Link
-            to="/"
+            to="/login"
             style={{
               color: "#818cf8",
               fontWeight: 600,

@@ -11,6 +11,8 @@ function Footer() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        flexWrap: "wrap",
+        gap: "12px",
         fontSize: "13px",
         opacity: 0.7
       }}
@@ -19,8 +21,17 @@ function Footer() {
         © {new Date().getFullYear()} LedgerAI
       </div>
 
-      <div style={{ display: "flex", gap: "20px" }}>
-        <span>Secure • Compliant • Accountant Friendly</span>
+      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
+        <span style={{ color: "rgba(255,255,255,0.5)" }}>
+          Secure • Compliant • Accountant Friendly
+        </span>
+        <span>|</span>
+        <a
+          href="mailto:amrutamai.in@gmail.com"
+          style={{ color: "#818cf8", textDecoration: "none" }}
+        >
+          amrutamai.in@gmail.com
+        </a>
       </div>
     </div>
   );
