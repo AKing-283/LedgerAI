@@ -6,11 +6,13 @@ from fastapi import APIRouter
 from fastapi import UploadFile
 from fastapi import File
 from fastapi import Depends
+from fastapi import HTTPException
 
 from app.services.pdf_service import extract_text
 from app.services.postgres_service import save_document
 from app.services.chunking_service import create_chunks
 from app.services.qdrant_service import store_chunks
+from app.services.qdrant_service import QdrantConfigError, QdrantUnavailableError
 from app.services.document_metadata_service import (
     extract_metadata,
     extract_gst
@@ -103,14 +105,16 @@ async def upload_pdf(
     print(metadata)
 
     # --------------------------------------------------
-    # SAVE DOCUMENT
+    # SAVE DOCUMENT (uses the route's session so the returned
+    # object stays bound and document.id is stable)
     # --------------------------------------------------
 
     document = save_document(
         organization_id=organization_id,
         filename=file.filename,
         content=text,
-        metadata=metadata
+        metadata=metadata,
+        db=db,
     )
 
     print("\nDOCUMENT SAVED")
@@ -122,8 +126,10 @@ async def upload_pdf(
     print("AMOUNT:", document.amount)
     print("DATE:", document.invoice_date)
 
+    document_id = str(document.id)
+
     # --------------------------------------------------
-    # VECTOR STORE
+    # VECTOR STORE (required: do not claim full success if it fails)
     # --------------------------------------------------
 
     chunks = create_chunks(text)
@@ -131,11 +137,22 @@ async def upload_pdf(
     print("\nTOTAL CHUNKS:")
     print(len(chunks))
 
-    store_chunks(
-        organization_id=organization_id,
-        document_id=document.id,
-        chunks=chunks
-    )
+    try:
+        store_chunks(
+            organization_id=organization_id,
+            document_id=document_id,
+            chunks=chunks
+        )
+    except (QdrantUnavailableError, QdrantConfigError) as exc:
+        # PostgreSQL persistence succeeded but vector storage failed.
+        # Surface a clear partial-failure instead of "Uploaded successfully".
+        raise HTTPException(
+            status_code=500,
+            detail=(
+                "Document saved to database but vector indexing failed. "
+                f"document_id={document_id}. Please retry indexing."
+            ),
+        ) from exc
 
     # --------------------------------------------------
     # NOTIFICATION: DOCUMENT UPLOADED
@@ -153,7 +170,7 @@ async def upload_pdf(
     print("=" * 80)
 
     return {
-        "document_id": str(document.id),
+        "document_id": document_id,
         "filename": file.filename,
         "message": "Uploaded successfully"
     }

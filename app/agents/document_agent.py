@@ -1,5 +1,4 @@
-from app.services.retrieval_service import retrieve_context
-from app.services.groq_service import ask_llm
+from app.services.retrieval_service import retrieve_chunks
 
 
 class DocumentAgent:
@@ -39,17 +38,29 @@ class DocumentAgent:
             question
         )
 
-        context = retrieve_context(
+        # Let QdrantUnavailableError / QdrantConfigError propagate so the
+        # API layer can return 503/500 instead of a fabricated grounded answer.
+        # Empty context ("") means no matching documents, which is handled
+        # separately from a connectivity failure (exception).
+        chunks = retrieve_chunks(
             organization_id,
             question
         )
+        context = "\n\n".join(c["content"] for c in chunks if c["content"])
+
+        # Import here to keep module import light for unit tests that mock it.
+        from app.services.groq_service import ask_llm
 
         answer = ask_llm(
             question,
             context
         )
 
+        grounded = bool(context.strip())
         return {
             "query_type": query_type,
-            "answer": answer
+            "answer": answer,
+            "grounded": grounded,
+            "context_chunks": len(chunks),
+            "has_context": grounded,
         }

@@ -29,47 +29,67 @@ def save_document(
     organization_id,
     filename,
     content,
-    metadata
+    metadata,
+    db=None
 ):
+    """Persist a Document.
 
-    db = SessionLocal()
-
-    document = Document(
-        organization_id=organization_id,
-        filename=filename,
-        content=content,
-        vendor=metadata.get("vendor", ""),
-        invoice_number=metadata.get("invoice_number", ""),
-        gst_number=metadata.get("gst_number", ""),
-        amount=float(metadata.get("amount", 0) or 0),
-        invoice_date=metadata.get("date", "")
-    )
-
-    existing = db.query(Document).filter(
-        Document.organization_id == organization_id,
-        Document.invoice_number == metadata.get(
-            "invoice_number",
-            ""
-        )
-    ).first()
-
-    if existing:
-        create_notification(
-            db=db,
+    Prefer the caller's session (e.g. the FastAPI route's ``db`` from
+    ``get_db``) so the returned ORM object stays bound for the request
+    and ``document.id`` etc. never raise ``DetachedInstanceError``.
+    When no session is supplied, an owned session is created and the
+    object is expunged with loaded attributes before the session closes.
+    """
+    owns_session = db is None
+    if owns_session:
+        db = SessionLocal()
+    try:
+        document = Document(
             organization_id=organization_id,
-            title="Duplicate Invoice",
-            message=f"Invoice {metadata.get('invoice_number', '')} already exists",
-            type="DUPLICATE_INVOICE"
+            filename=filename,
+            content=content,
+            vendor=metadata.get("vendor", ""),
+            invoice_number=metadata.get("invoice_number", ""),
+            gst_number=metadata.get("gst_number", ""),
+            amount=float(metadata.get("amount", 0) or 0),
+            invoice_date=metadata.get("date", "")
         )
-        db.close()
-        return existing
-    db.add(document)
 
-    db.commit()
+        invoice_no = metadata.get("invoice_number", "") or ""
+        existing = None
+        if invoice_no:
+            existing = db.query(Document).filter(
+                Document.organization_id == organization_id,
+                Document.invoice_number == invoice_no
+            ).first()
 
-    db.refresh(document)
+        if existing:
+            create_notification(
+                db=db,
+                organization_id=organization_id,
+                title="Duplicate Invoice",
+                message=f"Invoice {invoice_no} already exists",
+                type="DUPLICATE_INVOICE"
+            )
+            if owns_session:
+                # Load attributes before detaching so callers can safely
+                # read ids/fields after the owned session closes.
+                db.refresh(existing)
+                db.expunge(existing)
+            return existing
+        db.add(document)
 
-    return document
+        db.commit()
+
+        db.refresh(document)
+
+        if owns_session:
+            db.expunge(document)
+
+        return document
+    finally:
+        if owns_session:
+            db.close()
 
 def search_documents_keyword(
     organization_id: str,
